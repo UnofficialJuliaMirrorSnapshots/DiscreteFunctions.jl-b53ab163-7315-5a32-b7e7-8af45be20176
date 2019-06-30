@@ -2,11 +2,11 @@ module DiscreteFunctions
 
 using SimpleTools, Permutations
 
-import Base: length, show, getindex, setindex!, *, ==, hash, ^, inv, +
-import Permutations: fixed_points
+import Base: length, show, getindex, setindex!, *, ==, hash, ^, inv, +, Matrix
+import Permutations: fixed_points, Permutation
 
 export DiscreteFunction, IdentityFunction, RandomFunction, has_inv
-export fixed_points, image, is_permutation
+export fixed_points, image, is_permutation, Permutation
 
 """
 `DiscreteFunction` is a function from `{1,2,...,n}` to itself.
@@ -46,6 +46,14 @@ function DiscreteFunction(a::Int, args...)
 end
 
 DiscreteFunction(p::Permutation) = DiscreteFunction(p.data)
+
+function Permutation(f::DiscreteFunction)
+    if is_permutation(f)
+        return Permutation(f.data)
+    end
+    error("This function cannot be converted to a Permutation")
+end
+
 
 """
 `IdentityFunction(n)` creates the identity `DiscreteFunction` on
@@ -182,6 +190,21 @@ bijection on its domain.
 is_permutation(f::DiscreteFunction)::Bool = has_inv(f)
 
 
+"""
+`Matrix(f::DiscreteFunction)` returns an `n`-by-`n` zero-one matrix
+in which there is a `1` in position `i,j` exactly when `f(i)==j`.
+"""
+function Matrix(f::DiscreteFunction)::Array{Int,2}
+    n = length(f)
+    A = zeros(Int,n,n)
+    for i=1:n
+        j = f(i)
+        A[i,j]=1
+    end
+    return A
+end
+
 include("all_functions.jl")
+include("opt_sqrt.jl")
 
 end  # end of module

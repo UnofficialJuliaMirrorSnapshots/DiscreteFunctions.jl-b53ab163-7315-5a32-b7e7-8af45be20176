@@ -33,3 +33,11 @@ f = IdentityFunction(4)
 p = RandomPermutation(10)
 f = DiscreteFunction(p)
 @test f.data == p.data
+
+g = f*f
+A = Matrix(f)
+B = Matrix(g)
+@test A*A == B
+
+f = sqrt(g)
+@test g == f*f

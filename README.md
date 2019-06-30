@@ -41,6 +41,9 @@ DiscreteFunction on [6]
    6   5   4   2   3   1
 ```
 
+Conversely, if `f` is a `DiscreteFunction` that is invertible, it can be
+converted to a `Permutation` by `Permutation(f)`.
+
 ## Special Constructors
 
 * `IdentityFunction(n)` creates the identity function on the set `{1,2,...,n}`.
@@ -64,14 +67,16 @@ to negative exponents. The function `is_permutation` is a synonym for `has_inv`.
 + `length(f)` returns the number of elements in `f`'s domain.  
 + `fixed_points(f)` returns a list of the fixed points in the function.
 + `image(f)` returns a `Set` containing the output values of `f`.
++ `Matrix(f)` returns a square, zero-one matrix with a one in position `i,j`
+exactly when `f(i)==j`.
 
 
 #### Expensive operations
 + `all_functions(n)` returns an iterator for all functions defined on `1:n`.
 Note that there are `n^n` such functions so this grows quickly.
-+ `sqrt(f)` returns a `DiscreteFunction` `g` such that `g*g==f` or throws an
-error if no such function exists. (Currently this is done by iterating over all
-possible functions; that's very bad.)
++ `sqrt(g)` returns a `DiscreteFunction` `f` such that `f*f==g` or throws an
+error if no such function exists.  Found using integer linear programming.
++ `all_sqrts(g)` returns a list of all square roots of `g`. Very slow.
 
 ## Extras
 
